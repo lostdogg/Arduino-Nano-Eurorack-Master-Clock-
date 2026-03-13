@@ -1,2 +1,93 @@
 # Arduino-Nano-Eurorack-Master-Clock-
 This custom Eurorack Master Clock module turns an Arduino Nano into a performance-grade timing hub. It provides six simultaneous clock outputs: four are "Straight" (rock-steady grid timing) and two are "Swung" (shuffle-style rhythmic offset).
+Critical Build NotesProtection: Even though you are using a Nano, never skip the 1kΩ resistors 
+on the 6 output pins. Without them, accidentally patching two outputs together or sending a heavy 
+CV signal back into the Nano will likely kill the GPIO pins.Power: Eurorack provides $\pm 12V$. 
+The Arduino Nano (via the 5V pin) must be fed with a stable 5V. Do not connect the $\pm 12V$ pins
+of the rack directly to the Nano.Recommendation: Use a small LM7805 or a miniature buck converter
+(like the MP1584EN) to step the +12V rail down to 5V.Panel Layout: *Consider organizing your panel
+so the potentiometers (BPM/Swing) are at the top for easy access during a performance, the OLED
+is visible in the middle, and the 6 patch jacks are grouped together at the bottom for clean
+cable management.
+What You'll Need (BOM)
+Component,Description,Quantity,Notes
+Microcontroller,Arduino Nano (or clone)
+1,Display,"128x64 OLED (I2C, 4-pin)",1,SSD1306 driver recommended
+Potentiometer,10kΩ or 100kΩ (Linear),2,For BPM and Swing control
+Switch,SPST Toggle Switch,1,For Start/Stop
+Button,Momentary Push Button,1,For Humanize feature
+Output Jacks,3.5mm Mono Jack,6,Panel mount
+Resistors,1kΩ (1/4W),6,Protection for outputs (Required)
+Board,Prototyping Perfboard,1,To solder all connections
+Wiring,22-24 AWG Solid Core,As needed,
+Power,5V Regulator/Buck Converter,1,Or use Eurorack 5V bus rail
+Wiring Guide
+1. The OLED Display (I2C)
+
+VCC -> Nano 5V
+
+GND -> Nano GND
+
+SCL -> Nano A5
+
+SDA -> Nano A4
+
+2. Potentiometers:
+
+BPM Pot: Middle pin to A0, others to 5V and GND.
+
+Swing Pot: Middle pin to A1, others to 5V and GND.
+
+3. Output Jacks (D6 through D11):
+
+Connect each pin through a 1kΩ resistor to the Tip of a 3.5mm jack.
+
+D6, D7, D8, D9: Standard Clocks (no swing).
+
+D10, D11: Swung Clocks (MPC-style shuffle).
+
+4.Toggle Switch Pin 1: Nano GND
+
+Toggle Switch Pin 2: Nano D12
+
+
+
+
+
+How to use this module
+Outputs 1–4 (Pins 6–9): Plug these into your sequencers or dru-steady, "straight" clock.
+
+Outputs 5–6 (Pins 10–11): Plug these into your Hi-Hat or Percussion modules. As you turn the 
+Swing pot, you'll hear those specific drums start to "shuffle" or "gallop" while the rest of the 
+rack stays on the grid.
+
+The "MPC" Swing Logic
+In a swung rhythm, every second note (the "offbeat") is delayed.
+
+0% Swing: Perfectly even beats.
+
+50% Swing: The second beat is pushed exactly halfway into the next beat.
+
+100% Swing: (Theoretical) The second beat is pushed all the way to the start of the next beat.
+
+Rhythmic Behavior
+At 0% Swing: All 6 jacks fire simultaneously. This is your standard "four-on-the-floor" 
+electronic beat.
+
+At 50% Swing: The "Offbeat" (2nd and 4th beats) is delayed. If you have a snare on Out 5, 
+it will sound "lazy" or "behind the beat," giving it a hip-hop or jazz feel.
+
+The Difference: Even at 75% swing, your sequencers on Outs 1–4 will never drift. 
+They provide the "skeleton" of the track, while Outs 5–6 provide the "soul."
+
+A few "Pro" tips for your new module:
+The Power of 5 (Straight): Try plugging Output 1 into your main sequencer and Output 5 into a 
+percussion module with a "decay" or "roll" setting. The swing will make the rolls feel much
+ more organic.
+
+Case Grounding: Since you're using 6 jacks, make sure the "Sleeve" of all your jacks are tied to 
+the Arduino GND. This ensures a clean signal path across your entire Eurorack system.
+
+The "Reset" Trick: If you ever find your external sequencers are starting on the wrong beat, 
+just flick your Start/Stop toggle off and back on. The code resets both timing 
+engines to zero instantly.
