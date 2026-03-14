@@ -1,3 +1,5 @@
+https://patreon.com/lostdogg?utm_medium=unknown&utm_source=join_link&utm_campaign=creatorshare_creator&utm_content=copyLink
+
 # Arduino-Nano-Eurorack-Master-Clock-
 This custom Eurorack Master Clock module turns an Arduino Nano into a performance-grade timing hub. It provides six simultaneous clock outputs: four are "Straight" (rock-steady grid timing) and two are "Swung" (shuffle-style rhythmic offset).
 Critical Build NotesProtection: Even though you are using a Nano, never skip the 1kΩ resistors 
